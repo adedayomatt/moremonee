@@ -17,7 +17,7 @@
                    <product
                        :product="product"
                        :key="product.id"
-                       class="my-2"
+                       class="m-2"
                    />
                </div>
             </div>
@@ -52,7 +52,7 @@ export default {
         products: Object,
     },
     computed: {
-        ...mapGetters(['cartItemsTotal'])
+        ...mapGetters(['cart', 'cartItemsTotal'])
     }
 }
 </script>

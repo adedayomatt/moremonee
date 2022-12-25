@@ -9,7 +9,7 @@
             :disabled="!inStock"
             @input="addToCart">
         </app-input>
-        <div v-if="item.quantity > 0" class="text-right">
+        <div class="text-right">
             <small class="text-muted">Total: {{ (item.quantity * product.price) | money(product.currency) }}</small>
         </div>
     </div>

@@ -1,5 +1,5 @@
 <template>
-    <button class="btn" :disabled="loading" v-on="$listeners" >
+    <button class="btn" :disabled="loading || $attrs.disabled" v-on="$listeners" >
         <span class="spinner-border spinner-border-sm" role="status" v-if="loading">
             <span class="sr-only">Loading...</span>
         </span>

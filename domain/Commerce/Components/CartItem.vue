@@ -1,9 +1,9 @@
 <template>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-4">
             <img :src="product.preview.url" class="w-100" />
         </div>
-        <div class="col-md-8">
+        <div class="col-8">
             <div class="d-flex justify-content-between">
                 <h4>{{ product.name }}</h4>
                 <strong>{{ product.price | money(product.currency) }}</strong>

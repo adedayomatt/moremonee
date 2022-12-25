@@ -12,7 +12,7 @@
         <template v-if="cart.length">
             <template v-for="(item, i) in cart">
                 <cart-item  :item="item" :key="item.id" />
-                <hr v-if="i < (cart.length - 1)" class="my-2">
+                <hr v-if="i < (cart.length - 1)" class="my-3">
             </template>
         </template>
         <template v-else>

@@ -1,5 +1,10 @@
 <template>
     <div class="container">
+        <modal ref="modal" :title="modal.title" size="sm">
+            <div class="text-center">
+                {{ modal.content }}
+            </div>
+        </modal>
         <div class="py-2">
             <h1 class="text-primary">Checkout</h1>
         </div>
@@ -228,7 +233,7 @@
                         </div>
                     </div>
                     <hr class="mb-4">
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                    <app-button class="btn btn-primary btn-lg btn-block" :loading="loading" type="submit">Continue to checkout</app-button>
                 </form>
             </div>
         </div>
@@ -252,6 +257,11 @@ export default {
     layout: (h, page) => h(LayoutApp, [page]),
     data() {
         return {
+            loading: false,
+            modal: {
+                title: "",
+                content: ""
+            },
             use_billing_for_shipping: true,
             checkout:{
                 billing: {},
@@ -273,7 +283,16 @@ export default {
                 if(this.use_billing_for_shipping) {
                     this.checkout.shipping = { ...this.checkout.billing }
                 }
-                alert("Cannot checkout yet");
+                this.loading = true;
+                setTimeout( () => {
+                    this.modal = {
+                        title: "Checkout",
+                        content: "Checkout could not be completed at the moment, please try again later"
+                    }
+                    this.$refs.modal.show();
+                    this.loading = false
+                }, 5000)
+
             }
         },
         clearCart() {
