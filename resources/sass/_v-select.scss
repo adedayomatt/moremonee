@@ -1,0 +1,26 @@
+.v-select {
+    .selected-tag {
+        color: #147688;
+        background-color: #d7f3f9;
+        border-color: #91ddec;
+    }
+
+    &.vs--open {
+        .vs__dropdown-toggle, .vs__dropdown-menu {
+            border-color: $primary;
+        }
+    }
+
+    .vs__search {
+        color: $input-color;
+
+        &::placeholder {
+            color: $input-placeholder-color;
+        }
+    }
+
+    .vs__dropdown-toggle {
+        height: 40.5px;
+        background-color: $input-bg;
+    }
+}

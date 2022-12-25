@@ -1,0 +1,110 @@
+//
+// user.scss
+// Use this to write your custom SCSS
+//
+
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+
+.bg-gradient-green {
+    background: linear-gradient(276deg, #00B90C 0%, #00540B 100%);
+}
+.bg-gradient-orange {
+    background: linear-gradient(285deg, #FBC52A 0%, #FB6B01 100%);
+}
+.bg-gradient-red {
+    background: linear-gradient(306deg, #FF3F3F 0%, #620000 100%);
+}
+
+.btn-gradient-green {
+    background: linear-gradient(276deg, #00B90C 0%, #00540B 100%);
+    color: #fff !important;
+    @include hover-focus {
+        background: linear-gradient(276deg, #12db1b 0%, #0e721e 100%);
+        color: #fff !important;
+    }
+}
+
+.btn-gradient-orange {
+    background: linear-gradient(285deg, #FBC52A 0%, #FB6B01 100%);
+    color: #fff !important;
+    @include hover-focus {
+        background: linear-gradient(285deg, #f1c654 0%, #ff8934 100%);
+        color: #fff !important;
+    }
+}
+
+.text-green {
+    color: #00A00C !important;
+
+    &a {
+        @include hover-focus {
+            color: #12db1b !important;
+        }
+    }
+}
+
+
+.summary-card {
+    border-radius: 40px;
+    position: relative;
+
+    .overlay {
+        background-image: url("../../../assets/img/savings-card-bg.png");
+        background-size: contain;
+        background-position: bottom right;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+
+    .product {
+        font-size: 19px;
+        line-height: 23px;
+        margin-bottom: 2rem;
+    }
+    .text-small {
+        font-size: 12px;
+        line-height: 15px;
+    }
+    .balance {
+        font-weight: bold;
+        font-size: 30px;
+        line-height: 40px;
+    }
+}
+
+.display-5 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        line-height: 1.1;
+}
+
+.app-card {
+    border-radius: .9rem;
+    .card-footer:last-child {
+        border-radius: 0 0 calc(0.9rem - 1px) calc(0.9rem - 1px);
+    }
+}
+
+.shadow-app-card {
+    box-shadow: 0 0 .9rem #0000001A;
+}
+
+#app-customer {
+    .btn {
+        border-radius: 1rem;
+    }
+}
+
+.v-select.app .vs__dropdown-toggle {
+    background: #ddfae2;
+    border: none;
+    border-radius: .5rem;
+}
