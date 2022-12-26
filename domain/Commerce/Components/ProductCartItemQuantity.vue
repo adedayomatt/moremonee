@@ -7,7 +7,12 @@
             :max="product.in_stock"
             type="number"
             :disabled="!inStock"
-            @input="addToCart">
+            append-icon="fe fe-plus"
+            prepend-icon="fe fe-minus"
+            @input="addToCart"
+            :on-append-click="increaseCartQuantity"
+            :on-prepend-click="decreaseCartQuantity"
+        >
         </app-input>
         <div class="text-right">
             <small class="text-muted">Total: {{ (item.quantity * product.price) | money(product.currency) }}</small>
@@ -43,15 +48,25 @@ export default {
 
     methods: {
         addToCart(){
-            if((!this.quantity || this.quantity <= 0) && this.item.id){
-                this.$store.dispatch('removeCartItem', this.item)
-            } else {
+            if(!isNaN(this.quantity) && this.quantity > 0) {
                 this.$store.dispatch('addCartItem', {
                     quantity: this.quantity,
                     product: this.product
                 }).then(item => {
-                        this.item = item;
-                    })
+                    this.item = item;
+                })
+            } else if (this.item.id) {
+                this.$store.dispatch('removeCartItem', this.item)
+            }
+        },
+        increaseCartQuantity() {
+            this.item.quantity++;
+            this.addToCart()
+        },
+        decreaseCartQuantity() {
+            if(this.quantity > 0) {
+                this.item.quantity--;
+                this.addToCart()
             }
         }
     },

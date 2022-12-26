@@ -8,28 +8,28 @@
         <div class="input-group" :class="{'input-group-merge': groupMerge }">
 
             <!-- Icon -->
-            <div class="input-group-prepend" v-if="hasPrepend">
-          <span class="input-group-text">
-            {{ prependText }}
-            <i :class="prependIcon" v-if="prependIcon"></i>
-          </span>
+            <div :class="`input-group-prepend ${onPrependClick ? 'cursor-pointer' : ''}`" v-if="hasPrepend" @click="onPrependClick">
+                  <span class="input-group-text">
+                    {{ prependText }}
+                    <i :class="prependIcon" v-if="prependIcon"></i>
+                  </span>
             </div>
 
             <!-- Textarea -->
             <textarea v-if="$attrs.type === `textarea`" class="form-control" v-bind="$attrs" v-on="listeners"
                       :class="{ 'form-control-appended': hasAppend, 'form-control-prepended': hasPrepend }">
-      </textarea>
+            </textarea>
 
             <!-- Input -->
             <input v-else class="form-control" v-bind="$attrs" v-on="listeners"
                    :class="{ 'form-control-appended': hasAppend, 'form-control-prepended': hasPrepend }">
 
             <!-- Icon -->
-            <div class="input-group-append" v-if="hasAppend">
-          <span class="input-group-text">
-            {{ appendText }}
-            <i :class="appendIcon" v-if="appendIcon"></i>
-          </span>
+            <div :class="`input-group-append ${onAppendClick ? 'cursor-pointer' : ''}`" v-if="hasAppend" @click="onAppendClick">
+              <span class="input-group-text">
+                {{ appendText }}
+                <i :class="appendIcon" v-if="appendIcon"></i>
+              </span>
             </div>
 
         </div>
@@ -55,6 +55,8 @@
             prependIcon: String,
             prependText: String,
             groupMerge: Boolean,
+            onAppendClick: Function,
+            onPrependClick: Function,
         },
         computed: {
             hasAppend() {
