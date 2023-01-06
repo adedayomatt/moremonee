@@ -22,16 +22,6 @@
                </div>
             </div>
             <pagination :links="products" />
-            <div class="row justify-content-center mt-3">
-                <div class="col-lg-6 col-md-8">
-                    <app-button class="btn btn-primary btn-lg btn-block"
-                                @click="$inertia.visit(route('commerce.checkout'))"
-                                :disabled="cartItemsTotal <= 0"
-                    >
-                        Continue to checkout
-                    </app-button>
-                </div>
-            </div>
         </div>
         <div v-else class="text-muted text-center">
             <h2>No POS available for purchase at the moment</h2>

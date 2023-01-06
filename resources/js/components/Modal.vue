@@ -8,7 +8,7 @@
                     <div class="card-header">
                         <slot name="header">
                             <h3 class="card-header-title">{{ title }}</h3>
-                            <button type="button" class="close" @click="hide" aria-label="Close">
+                            <button v-if="closeButton" type="button" class="close" @click="hide" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </slot>
@@ -36,6 +36,7 @@
             hasHeader: { type: Boolean, default: true },
             keyboard: { type: Boolean, default: true },
             backdrop: { default: true },
+            closeButton: { type: Boolean, default: true }
         },
         computed: {
             dialogClass() {

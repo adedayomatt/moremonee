@@ -25,7 +25,15 @@ class Controller extends BaseController
         return Auth::user();
     }
 
+    public function getTempUser()
+    {
+        return session()->get("temp-user");
+    }
 
+    public function setTempUser($user = null) {
+        session()->put("temp-user", $user ? $user : (object) request()->only(["email"]));
+        return $this->getTempUser();
+    }
 
     public function getAuthBranches()
     {
@@ -50,4 +58,5 @@ class Controller extends BaseController
                 $query->where('account_officer_id', $this->user()->getKey());
             });
     }
+
 }

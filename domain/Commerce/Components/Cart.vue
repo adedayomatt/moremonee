@@ -20,25 +20,6 @@
                 <h3>No item added yet</h3>
             </div>
         </template>
-        <template #footer>
-            <div>
-                <h4>Total: {{ cartTotal | money }}</h4>
-            </div>
-            <div class="d-flex justify-content-between align-content-center">
-                <app-button
-                    class="btn btn-sm btn-outline-danger mx-2"
-                    :disabled="cart.length == 0"
-                    @click="clearCart">
-                    Clear cart
-                </app-button>
-                <app-button
-                    class="btn btn-sm btn-primary mx-2"
-                    :disabled="cart.length == 0"
-                    @click="checkout">
-                    Checkout
-                </app-button>
-            </div>
-        </template>
     </modal-vertical>
 </template>
 
@@ -54,7 +35,7 @@ export default {
         return {};
     },
     computed: {
-        ...mapGetters(['cart', 'cartTotal'])
+        ...mapGetters(['cart'])
     },
     methods: {
         hide() {
@@ -63,15 +44,6 @@ export default {
         show() {
             this.$refs.modal.show();
         },
-        clearCart() {
-            this.$store.dispatch('clearCartItem').then(() => {
-                this.hide();
-            })
-        },
-        checkout() {
-            this.hide();
-            this.$inertia.visit(this.route('commerce.checkout'))
-        }
-    }
+    },
 }
 </script>

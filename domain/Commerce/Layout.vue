@@ -7,13 +7,12 @@
                     <inertia-link class="navbar-brand mr-auto" :href="route('commerce')">
                         <div class="d-flex">
                             <img
-                                src="./assets/moremonee_logo.png"
-                                alt="MoreMonee Logo"
+                                :src="config.logo_url"
+                                :alt="config.business_name"
                                 class="navbar-brand-img">
-                            <h3 class="text-primary ml-2">MoreMonee POS</h3>
+                            <h3 class="text-primary ml-2">{{ config.business_name }}</h3>
                         </div>
                     </inertia-link>
-
 
                     <div class="navbar-user position-relative">
                         <inertia-link href="#" class="navbar-user-link" role="button" @click.prevent="$refs.cart.show()">
@@ -31,34 +30,90 @@
             <main class="main-content pt-6 mx-2" style="min-height: 90vh;">
                 <slot />
             </main>
+            <div
+                v-if="toast.show"
+                class="d-flex justify-content-center position-fixed w-100" style="z-index: 99999; bottom: 10px;">
+                <div :class="`alert alert-${toast.type} alert-dismissible fade show mx-2`"
+                     role="alert">
+                    <div v-html="toast.message"></div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+
             <footer class="my-5 pt-5 pb-3 text-muted text-center">
                 <p class="mb-1">© {{ new Date().getFullYear() }} MoreMonee</p>
                 <ul class="mt-4 list-inline font-size-lg">
-                    <li class="list-inline-item">
-                        <a href="https://www.facebook.com/profile.php?id=100086742019184" target="_blank"><i class="fe fe-facebook"></i></a>
+                    <li v-if="config.facebook_url" class="list-inline-item">
+                        <a :href="config.facebook_url" target="_blank"><i class="fe fe-facebook"></i></a>
                     </li>
-                    <li class="list-inline-item">
-                        <a href="https://www.instagram.com/more.monee/" target="_blank"><i class="fe fe-instagram"></i></a>
+                    <li v-if="config.instagram_url" class="list-inline-item">
+                        <a :href="config.instagram_url" target="_blank"><i class="fe fe-instagram"></i></a>
                     </li>
-                    <li class="list-inline-item">
-                        <a href="https://api.whatsapp.com/send?phone=2347033688463" target="_blank"><i class="fe fe-phone"></i></a>
+                    <li v-if="config.whatsapp_url" class="list-inline-item">
+                        <a :href="config.whatsapp_url" target="_blank"><i class="fe fe-phone"></i></a>
                     </li>
                 </ul>
             </footer>
+            <div v-if="route().current('commerce') || route().current('orders')" class="pb-4"></div>
+            <nav v-if="route().current('commerce') || route().current('orders')" class="navbar fixed-bottom bg-light">
+                <div class="container-fluid">
+                    <cart-checkout />
+                </div>
+            </nav>
         </div>
 </template>
 
 <script>
 
-import { mapGetters } from 'vuex';
+import {mapActions, mapGetters, mapMutations} from 'vuex';
 import CartModal from "./Components/Cart";
+import CartCheckout from "./Components/CartCheckout";
 export default {
     name: 'CommerceApp',
-    components: {CartModal},
+    components: {CartCheckout, CartModal},
     computed: {
         ...mapGetters([
-            'cart'
+            'cart', 'toast'
+        ]),
+        config() {
+            return this.$page.props.config;
+        }
+    },
+    methods: {
+        ...mapActions([
+            'clearCartItem'
+        ]),
+        ...mapMutations([
+            'SET_TOAST', 'SET_TEMP_USER'
         ])
+    },
+    watch: {
+        $page: {
+            immediate: true,
+            handler(page) {
+                const toast = page.props.toast;
+                const transaction = page.props.transaction;
+                if(toast.message) {
+                    this.SET_TOAST({
+                        show: true,
+                        type: !toast.type ? "primary" : (toast.type === "error" ? "danger" :  toast.type),
+                        message: toast.message,
+                    })
+                }
+                if(transaction) {
+                    switch (transaction.action_required) {
+                        case "clear_cart":
+                            this.clearCartItem()
+                            break;
+                    }
+                }
+                if(page.props.tempUser) {
+                    this.SET_TEMP_USER(page.props.tempUser)
+                }
+            }
+        }
     }
 }
 </script>

@@ -32,22 +32,31 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Inertia::share([
+
             'errors' => function () {
                 return self::shareErrors();
             },
-            'status' => function () {
-                return Session::get('status');
+            'toast' => function () {
+                return (object) Session::get('toast');
             },
-            'error' => function () {
-                return Session::get('error');
+            'transaction' => function () {
+                return Session::get('transaction');
             },
-            'business' => function () {
+            'config' => function () {
                 return [
-                    'name' => config('business.name'),
-                    'website' => config('business.website'),
+                    'app_name' => config('app.name'),
+                    'logo_url' => config('business.logo'),
+                    'business_name' => config('business.name'),
+                    'business_website' => config('business.website'),
+                    'default_currency' => config('business.currency'),
+                    'whatsapp_url' => config('business.whatsapp'),
+                    'instagram_url' => config('business.instagram'),
+                    'facebook_url' => config('business.facebook')
                 ];
             },
-            'app_name' => config('app.name'),
+            'tempUser' =>  function () {
+                return Session::get('temp-user');
+            }
         ]);
     }
 

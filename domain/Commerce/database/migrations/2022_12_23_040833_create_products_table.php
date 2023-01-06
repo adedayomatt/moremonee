@@ -23,6 +23,7 @@ class CreateProductsTable extends Migration
             $table->longText('description')->nullable();
             $table->json('media')->nullable();
             $table->enum('status', ['enabled', 'disabled'])->default("disabled");
+            $table->json("metadata")->nullable();
             $table->timestamps();
         });
     }

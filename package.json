@@ -41,6 +41,7 @@
         "@inertiajs/inertia": "^0.8.6",
         "@inertiajs/inertia-vue": "^0.5.6",
         "@inertiajs/progress": "^0.2.4",
+        "country-state-city": "^3.1.2",
         "daterangepicker": "^3.1.0",
         "dayjs": "^1.10.4",
         "ignore-loader": "^0.1.2",

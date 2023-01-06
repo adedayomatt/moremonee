@@ -1,4 +1,4 @@
-import CartService from '../services/cart';
+import CartService from '../Services/cart';
 
 const actions = {
     addCartItem: ({ commit }, { quantity, product }) => {

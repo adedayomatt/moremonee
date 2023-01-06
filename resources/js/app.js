@@ -14,6 +14,7 @@ import Pagination from './components/Pagination.vue';
 import ModalVertical from './components/ModalVertical.vue';
 import ModalConfirmation from './components/ModalConfirmation.vue';
 import FileInput from "./components/FileInput";
+import {padStart} from "lodash";
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -66,8 +67,8 @@ Vue.filter('file', (bytes, si=false, dp=1) => {
 Vue.filter('datetime', (value) => {
     if (!value) return '';
     const dateTime = new Date(Date.parse(value));
-    const date = `${dateTime.getDate()}/${dateTime.getMonth()}/${dateTime.getFullYear()}`;
-    const time = `${dateTime.getHours()}:${dateTime.getMinutes()}:${dateTime.getSeconds()}`;
+    const date = `${padStart(dateTime.getDate(), 2, 0)}/${ padStart(dateTime.getMonth()+1, 2, "0") }/${dateTime.getFullYear()}`;
+    const time = `${dateTime.getHours()}:${dateTime.getMinutes()}:${padStart(dateTime.getSeconds(), 2, 0)}`;
     return `${date} ${time}`;
 });
 Vue.filter('datetimeLong', (value) => {

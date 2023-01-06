@@ -16,8 +16,8 @@
                         <slot></slot>
                     </div>
                     <div class="card-footer">
-                        <x-button class="btn btn-white" @click="confirm" :loading="loading">Yes</x-button>
-                        <x-button class="btn btn-white" @click="hide">Cancel</x-button>
+                        <app-button class="btn btn-white" @click="confirm" :loading="loading">Yes</app-button>
+                        <app-button class="btn btn-white" @click="hide">Cancel</app-button>
                     </div>
                 </div>
             </div>

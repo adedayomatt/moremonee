@@ -22,6 +22,7 @@ class ProductsSeeder extends Seeder
                 'in_stock' => 100,
                 'status' => 'enabled',
                 'price' => 150,
+                'currency' => 'USD',
                 'media' => [
                     [
                         "type" => "image",

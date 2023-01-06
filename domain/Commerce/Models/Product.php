@@ -10,7 +10,8 @@ class Product extends Model
 
 
     protected $casts = [
-        'media' => 'array'
+        'media' => 'array',
+        'metadata' => 'object'
     ];
 
     protected $appends = [
@@ -20,6 +21,10 @@ class Product extends Model
     public function getPreviewAttribute() {
         return collect($this->media)->firstWhere('type', 'image')
             ?: "https://moremoneegroup.com/images/phone.png";
+    }
+
+    public function orderItems() {
+        return $this->hasMany(OrderItem::class);
     }
 
 }
