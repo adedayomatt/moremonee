@@ -82,10 +82,10 @@ export default {
     data() {
         return {
             form: {
-                name_on_card: "Adedayo Matthews",
-                card_number: "5531886652142950",
-                expiry: "09/32",
-                cvv: "564"
+                name_on_card: "",
+                card_number: "",
+                expiry: "",
+                cvv: ""
             }
         }
     },
