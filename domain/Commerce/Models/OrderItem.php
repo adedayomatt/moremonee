@@ -10,6 +10,12 @@ class OrderItem extends Model
         "order_id", "product_id", "reference", "quantity", "amount", "currency", "status"
     ];
 
+    protected $appends = ["total"];
+
+    public function getTotalAttribute() {
+        return $this->quantity * $this->amount;
+    }
+
     public function order()
     {
         return $this->belongsTo(Order::class);

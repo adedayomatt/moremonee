@@ -11,4 +11,5 @@ return [
     'whatsapp' => env("WHATSAPP_URL"),
     'allowed_cross_origin_domains' => explode(",",env("ALLOWED_CROSS_ORIGIN_DOMAINS", "")),
     'enable_multiple_currency' => env("ENABLE_MULTIPLE_CURRENCY", false),
+    'enable_order_mail' => env("ENABLE_ORDER_MAIL", false),
 ];

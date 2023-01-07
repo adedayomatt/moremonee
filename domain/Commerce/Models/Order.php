@@ -3,12 +3,14 @@
 namespace Domain\Commerce\Models;
 
 use App\Classes\Utils;
-use Carbon\Carbon;
 use Domain\Commerce\Constants\Constants;
+use Domain\Commerce\Notifications\OrderCompletedNotification;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Order extends Model
 {
+    use Notifiable;
 
     protected $fillable = [
         "reference", "status", "email", "billing", "shipping", "metadata"
@@ -66,6 +68,11 @@ class Order extends Model
             $item->product->save();
         });
         Utils::clearMemory($this->reference);
+        if(config('business.enable_order_mail')) {
+            try {
+                $this->notify(new OrderCompletedNotification());
+            } catch (\Exception $e) {}
+        }
     }
 
     public function updateBillingAddress($address) {
