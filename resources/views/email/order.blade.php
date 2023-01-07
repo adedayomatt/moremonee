@@ -1,6 +1,6 @@
 @component('mail::message')
 Dear {{ $order->billing->first_name }},
-<p>Your order has been received.</p>
+<p>Your order {{ $order->reference  }} has been received.</p>
 
 @component('mail::table')
 | Items |      |

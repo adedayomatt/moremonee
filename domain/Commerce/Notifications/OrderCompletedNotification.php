@@ -37,7 +37,7 @@ class OrderCompletedNotification extends Notification implements ShouldQueue
     public function toMail(Order $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->subject("Order Completed")
+            ->subject("Order {$notifiable->reference} Completed")
             ->markdown("email.order", [
                 'order' => $notifiable
             ]);
