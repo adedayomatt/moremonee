@@ -1,11 +1,11 @@
 <template>
     <div class="container py-4">
-        <div class="shadow-lg rounded-lg p-1 p-md-3">
+        <h1>Order {{ order.reference }}</h1>
+        <h4>status: <span :class="`badge badge-${order.status == 'completed' ? 'success' : 'warning'}`">{{ order.status }}</span></h4>
+        <small class="text-muted">Created {{ order.created_at | datetime }}</small>
+        <div class="bg-white rounded-lg p-2 p-md-3">
             <div class="row justify-content-center">
             <div class="col-md-8">
-                <h1>Order {{ order.reference }}</h1>
-                <h4>status: <span :class="`badge badge-${order.status == 'completed' ? 'success' : 'warning'}`">{{ order.status }}</span></h4>
-                <small class="text-muted">Created {{ order.created_at | datetime }}</small>
                 <h2>Items</h2>
                 <ul class="list-group mb-3">
                     <li

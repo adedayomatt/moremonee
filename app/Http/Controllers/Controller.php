@@ -30,8 +30,9 @@ class Controller extends BaseController
         return session()->get("temp-user");
     }
 
-    public function setTempUser($user = null) {
-        session()->put("temp-user", $user ? $user : (object) request()->only(["email"]));
+    public function setTempUser($user = []) {
+        $existingUser = $this->getTempUser() ?? [];
+        session()->put("temp-user", array_merge($existingUser, $user));
         return $this->getTempUser();
     }
 

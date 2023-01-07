@@ -5,6 +5,7 @@ const state = {
     checkout: CartService.getCheckout(),
     toast: {},
     tempUser: null,
+    currency: null,
 }
 
 export default state;

@@ -20,12 +20,8 @@ class TransactionVerify extends Controller
         if($transaction) {
             $charge = Flutterwave::verifyCharge($transaction->reference, $transaction->metadata->chargeId);
             if($charge && $charge->status == Constants::STATUS_SUCCESS && $charge->data->status == Constants::STATUS_SUCCESSFUL) {
-                $transaction->update([
-                    "status" => Constants::STATUS_SUCCESS
-                ]);
-                $transaction->order->update([
-                    "status" => Constants::STATUS_COMPLETED
-                ]);
+                $transaction->update([ "status" => Constants::STATUS_SUCCESS ]);
+                $transaction->order->complete();
                 return redirect()->route("order.view", [$transaction->order->reference])
                     ->with("transaction", [
                         "action_required" => "clear_cart"

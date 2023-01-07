@@ -17,6 +17,9 @@ export default {
     computed: {
         transaction() {
             return this.$page.props.transaction
+        },
+        allowedDomains() {
+            return this.$page.props.config.allowed_cross_origin_domains
         }
     },
     data() {
@@ -30,11 +33,7 @@ export default {
         const eventer = window[eventMethod];
         const messageEvent = "attachEvent" == eventMethod ? "onmessage" : "message";
         eventer(messageEvent, function(e) {
-            if([
-                "https://ravesandboxapi.flutterwave.com",
-                "https://api.flutterwave.com",
-            ].includes(e.origin)) {
-                instance.open = false;
+            if(instance.allowedDomains.includes(e.origin)) {
                 instance.$emit("callback", e.data)
             }
         }, false);

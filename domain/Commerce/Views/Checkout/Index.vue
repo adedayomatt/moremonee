@@ -29,7 +29,7 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                             <span>Total</span>
-                            <strong>{{ cartTotal | money }}</strong>
+                            <strong>{{ cartTotal | money($store.getters.currency) }}</strong>
                         </li>
                     </ul>
                     <app-button v-if="!order"

@@ -2,14 +2,20 @@
     <div>
         <h2 class="mb-3">Payment</h2>
         <h6 class="text-muted">{{ order.reference }}</h6>
-        <credit-card
-            v-if="!transaction || startOver"
+        <credit-card v-if="!transaction || startOver"
             @input="submitCard"
             :loading="ui.submittingCard" />
-        <otp-validation
-            v-else-if="transaction.action_required == 'otp'"
-            @input="validateOtp"
-            :loading="ui.validatingOtp"
+        <card-pin v-else-if="transaction.action_required == 'pin'"
+          @input="submitPin"
+          :loading="ui.submittingPin"/>
+        <otp v-else-if="transaction.action_required == 'otp'"
+            @input="submitOtp"
+            :loading="ui.submittingOtp"
+        />
+        <verify-address v-else-if="transaction.action_required == 'verify_address'"
+         :order="order"
+        :loading="ui.submittingAddress"
+        @input="submitAddress"
         />
         <redirect v-else-if="transaction.action_required == 'redirect'" @callback="postCallback"/>
         <div v-else-if="transaction.action_required == 'verify_transaction'"
@@ -27,9 +33,10 @@
             :loading="ui.verifyingTransaction"
             >Try Again</app-button>
             <app-button
-                class="btn btn-primary btn-block my-2"
+                v-if="transaction"
+                class="btn btn-outline-primary btn-sm my-2"
                 @click="startOver = true"
-            >Re-Attempt Payment</app-button>
+            > <i class="fe fe-refresh-cw"></i> Use another card</app-button>
         </div>
     </div>
 </template>
@@ -39,19 +46,23 @@ import LayoutApp from "../../Layout";
 import Checkout from "./Index";
 import { mapMutations } from "vuex";
 import CreditCard from "../../Components/Payment/CreditCard";
-import OtpValidation from "../../Components/Payment/OtpValidation";
+import Otp from "../../Components/Payment/Otp";
+import CardPin from "../../Components/Payment/CardPin";
 import Redirect from "../../Components/Payment/Redirect";
+import VerifyAddress from "../../Components/Payment/VerifyAddress";
 
 export default {
     name: 'CheckoutPayment',
-    components: {Redirect, OtpValidation, CreditCard},
+    components: {VerifyAddress, Redirect, Otp, CreditCard, CardPin},
     layout: (h, page) => h( LayoutApp, [h(Checkout, [page])]),
     data() {
         return {
             startOver: false,
             ui: {
                 submittingCard: false,
-                validatingOtp: false,
+                submittingOtp: false,
+                submittingPin: false,
+                submittingAddress: false,
                 verifyingTransaction: false,
             },
         }
@@ -80,25 +91,42 @@ export default {
             this.ui.submittingCard = false;
         },
 
-        async validateOtp(data) {
-            this.ui.validatingOtp = true;
+        async submitOtp(data) {
+            this.ui.submittingOtp = true;
             await this.$inertia.post(route("otp.validate", [ this.transaction.transaction.reference ]), {
                 otp: data.otp,
-            },{
-                onSuccess: () => {
-
-                },
-                onError: e => {
-
-                }
             })
-            this.ui.validatingOtp = false;
+            this.ui.submittingOtp = false;
+        },
+
+        async submitPin(data) {
+            this.ui.submittingPin = true;
+            await this.$inertia.post(this.route('order.pay', [this.order.reference]), {
+                ...this.transaction.card,
+                auth_mode: this.transaction.auth_mode,
+                transaction_reference: this.transaction.transaction_reference,
+                card_pin: data.pin,
+            })
+            this.ui.submittingPin = false;
+        },
+
+        async submitAddress(data) {
+            this.ui.submittingAddress = true;
+            await this.$inertia.post(this.route('order.pay', [this.order.reference]), {
+                ...this.transaction.card,
+                auth_mode: this.transaction.auth_mode,
+                transaction_reference: this.transaction.transaction_reference,
+                address: data,
+            })
+            this.ui.submittingAddress = false;
         },
 
         async verifyTransaction() {
-            this.ui.verifyingTransaction = true;
-            await this.$inertia.post(route("transaction.verify", [ this.transaction.transaction.reference ]));
-            this.ui.verifyingTransaction = false;
+            if(this.transaction.transaction.reference) {
+                this.ui.verifyingTransaction = true;
+                await this.$inertia.post(route("transaction.verify", [ this.transaction.transaction.reference ]));
+                this.ui.verifyingTransaction = false;
+            }
         },
 
         async postCallback(data) {

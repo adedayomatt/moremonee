@@ -1,14 +1,1 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[19],{
-
-/***/ "./domain/Commerce/Actions/ProductList.php":
-/*!*************************************************!*\
-  !*** ./domain/Commerce/Actions/ProductList.php ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-
-
-/***/ })
-
-}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[19],{18:function(t,e,o){"use strict";o.r(e);var a={name:"ProductMedia",components:{},props:{product:Object},computed:{},data:function(){return{}},methods:{}},c=o(0),s=Object(c.a)(a,(function(){var t=this,e=t.$createElement,o=t._self._c||e;return o("div",t._l(t.product.media,(function(e,a){return o("div",{key:a,staticClass:"my-2"},["image"===e.type?o("img",{staticClass:"d-block mx-auto",attrs:{src:e.url,height:"500px",width:"auto",alt:t.product.name}}):"video"===e.type?o("video",{staticClass:"d-block w-100 mx-auto",attrs:{src:e.url,controls:""}}):t._e()])})),0)}),[],!1,null,null,null);e.default=s.exports}}]);

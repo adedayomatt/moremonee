@@ -21,4 +21,9 @@ class Transaction extends Model
     public function order() {
         return $this->belongsTo(Order::class);
     }
+    public function getTransactionData($ref) {
+    }
+
+    public function saveTransactionData($ref, $data = []) {
+    }
 }

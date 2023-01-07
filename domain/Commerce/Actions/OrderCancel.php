@@ -1,6 +1,7 @@
 <?php
 namespace Domain\Commerce\Actions;
 
+use App\Classes\Utils;
 use App\Http\Controllers\Controller;
 use Domain\Commerce\Constants\Constants;
 use Domain\Commerce\Models\Order;
@@ -15,7 +16,8 @@ class OrderCancel extends Controller
         $order->update([
             "status" => Constants::STATUS_CANCELLED
         ]);
-        return redirect()->route("order.view", [$reference])->with("toast", [
+        Utils::clearMemory($reference);
+        return redirect()->route("checkout.view")->with("toast", [
             "type" => "success",
             "message" => "Order $reference cancelled"
         ]);

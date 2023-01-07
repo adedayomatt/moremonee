@@ -4,7 +4,7 @@
             <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="topnav">
                 <div class="container px-2">
                     <!-- Brand -->
-                    <inertia-link class="navbar-brand mr-auto" :href="route('commerce')">
+                    <inertia-link class="navbar-brand mr-auto" :href="route('commerce', [$store.getters.currency])">
                         <div class="d-flex">
                             <img
                                 :src="config.logo_url"
@@ -13,14 +13,21 @@
                             <h3 class="text-primary ml-2">{{ config.business_name }}</h3>
                         </div>
                     </inertia-link>
-
+                    <div v-if="config.enable_multiple_currency" class="mx-2" style="width: 180px">
+                        <x-select
+                            :options="config.currencies || []"
+                            :value="$store.getters.currency"
+                            @input="currencyChange"
+                            class="mr-2 w-100"
+                        />
+                    </div>
                     <div class="navbar-user position-relative">
                         <inertia-link href="#" class="navbar-user-link" role="button" @click.prevent="$refs.cart.show()">
-                    <span
-                        class="position-absolute text-center bg-primary text-white d-flex justify-content-center align-items-center"
-                        style="height:30px; width: 30px; border-radius: 50%; right: -15px; top: -10px">
-                        {{ $store.getters.cartItemsTotal >= 100 ? '99+' : $store.getters.cartItemsTotal }}
-                    </span>
+                            <span
+                                class="position-absolute text-center bg-primary text-white d-flex justify-content-center align-items-center"
+                                style="height:30px; width: 30px; border-radius: 50%; right: -15px; top: -10px">
+                                {{ $store.getters.cartItemsTotal >= 100 ? '99+' : $store.getters.cartItemsTotal }}
+                            </span>
                             <i class="fe fe-shopping-cart" style="font-size: 28px"></i>
                         </inertia-link>
                     </div>
@@ -73,21 +80,40 @@ import CartCheckout from "./Components/CartCheckout";
 export default {
     name: 'CommerceApp',
     components: {CartCheckout, CartModal},
+    data() {
+        return {}
+    },
     computed: {
         ...mapGetters([
             'cart', 'toast'
         ]),
         config() {
             return this.$page.props.config;
-        }
+        },
     },
     methods: {
         ...mapActions([
             'clearCartItem'
         ]),
         ...mapMutations([
-            'SET_TOAST', 'SET_TEMP_USER'
-        ])
+            'SET_TOAST', 'SET_TEMP_USER', 'SET_CURRENCY'
+        ]),
+        currencyChange(currency) {
+            if(!currency){
+                this.SET_TOAST({
+                    show: true,
+                    type: "danger",
+                    message: "You need to select a currency"
+                })
+                return;
+            }
+            this.SET_CURRENCY(currency);
+            this.$inertia.visit(route('commerce', { currency }), {
+                onSuccess: () => {
+                    this.clearCartItem();
+                }
+            })
+        }
     },
     watch: {
         $page: {
@@ -100,6 +126,7 @@ export default {
                         show: true,
                         type: !toast.type ? "primary" : (toast.type === "error" ? "danger" :  toast.type),
                         message: toast.message,
+                        stick: toast.stick
                     })
                 }
                 if(transaction) {
@@ -110,10 +137,14 @@ export default {
                     }
                 }
                 if(page.props.tempUser) {
-                    this.SET_TEMP_USER(page.props.tempUser)
+                    this.SET_TEMP_USER(page.props.tempUser);
+                }
+                this.SET_CURRENCY(page.props.tempUser?.currency || page.props.config.default_currency);
+                if(this.cart.length && !this.cart.every(item => item.product.currency === this.$store.getters.currency)) {
+                    this.clearCartItem();
                 }
             }
-        }
+        },
     }
 }
 </script>

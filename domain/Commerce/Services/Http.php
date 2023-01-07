@@ -3,6 +3,7 @@ namespace Domain\Commerce\Services;
 
 use Domain\Commerce\Models\ExternalServiceRequest;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 class Http {
     protected $client;
@@ -39,10 +40,12 @@ class Http {
             $this->log->response = json_encode($responseBody);
             $this->log->save();
             return $responseBody;
-        } catch (\Exception $e) {
-            $this->log->response = $e->getMessage();
+        }
+        catch (\Exception $e) {
+            $responseBody = json_decode($e->getResponse()->getBody());
+            $this->log->response = json_encode($responseBody);
             $this->log->save();
-            return false;
+            return $responseBody;
         }
     }
 

@@ -2,6 +2,7 @@
 
 namespace Domain\Commerce\Models;
 
+use App\Classes\Utils;
 use Carbon\Carbon;
 use Domain\Commerce\Constants\Constants;
 use Illuminate\Database\Eloquent\Model;
@@ -58,5 +59,21 @@ class Order extends Model
         return uniqid("MM-".time()."-");
     }
 
+    public function complete() {
+        $this->update([ "status" => Constants::STATUS_COMPLETED ]);
+        $this->orderItems->each(function($item) {
+            $item->product->in_stock -= $item->quantity;
+            $item->product->save();
+        });
+        Utils::clearMemory($this->reference);
+    }
+
+    public function updateBillingAddress($address) {
+        $billing = $this->billing;
+        $billing->address = $address;
+        $this->billing = $billing;
+        $this->save();
+        return $this;
+    }
 
 }

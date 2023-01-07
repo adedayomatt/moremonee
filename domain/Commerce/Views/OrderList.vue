@@ -1,8 +1,8 @@
 <template>
     <div class="container py-4">
-        <div class="shadow-lg p-1 p-md-3 rounded-lg overflow-auto">
-            <h2>Orders</h2>
-            <p class="text-muted">{{ tempUser.email }}</p>
+        <h2>Orders - {{ orders.total | numberFormat }}</h2>
+        <p class="text-muted">{{ tempUser.email }}</p>
+        <div class="bg-white rounded-lg overflow-auto">
             <div v-if="orders.total">
                 <table class="table table-striped">
                     <thead>
@@ -35,7 +35,7 @@
                     </tfoot>
                 </table>
             </div>
-            <div v-else class="text-muted text-center">
+            <div v-else class="text-muted text-center py-5">
                 <h2>No order found</h2>
                 <p>No order has been created for {{ tempUser.email }} yet</p>
             </div>

@@ -14,6 +14,7 @@
             :on-prepend-click="decreaseCartQuantity"
         >
         </app-input>
+        <small v-if="limitReached" class="text-danger mt-n3">Stock limit of {{ product.in_stock }} reached</small>
         <div class="text-right">
             <small class="text-muted">Total: {{ (item.quantity * product.price) | money(product.currency) }}</small>
         </div>
@@ -38,11 +39,17 @@ export default {
         ...mapGetters([
             'cart'
         ]),
+        maxLimit() {
+            return this.product.in_stock;
+        },
         inStock() {
             return this.product.in_stock > 0;
         },
         quantity() {
             return parseInt(this.item.quantity)
+        },
+        limitReached() {
+            return this.quantity >= this.maxLimit
         }
     },
 
@@ -50,7 +57,7 @@ export default {
         addToCart(){
             if(!isNaN(this.quantity) && this.quantity > 0) {
                 this.$store.dispatch('addCartItem', {
-                    quantity: this.quantity,
+                    quantity: this.quantity >= this.maxLimit ? this.maxLimit : this.quantity,
                     product: this.product
                 }).then(item => {
                     this.item = item;
@@ -61,6 +68,9 @@ export default {
         },
         increaseCartQuantity() {
             this.item.quantity++;
+            if(this.limitReached) {
+                this.item.quantity = this.maxLimit;
+            }
             this.addToCart()
         },
         decreaseCartQuantity() {

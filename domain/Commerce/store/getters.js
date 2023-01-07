@@ -5,6 +5,7 @@ const getters = {
     checkout: state => state.checkout,
     toast: state => state.toast,
     tempUser: state => state.tempUser,
+    currency: state => state.currency,
 };
 
 export default getters;

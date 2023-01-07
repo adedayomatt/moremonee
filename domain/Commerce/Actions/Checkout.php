@@ -11,9 +11,9 @@ class Checkout extends Controller
     public function __invoke(Request $request)
     {
         $this->validate($request, [
-            "email" => ["required", "email"]
+            "email" => ["required", "email"],
         ]);
-        $this->setTempUser();
+        $this->setTempUser($request->only(['email']));
         return redirect()->route("checkout.view");
     }
 }

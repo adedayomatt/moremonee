@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent class="row justify-content-md-center w-100 align-items-center" >
         <div class="col-12 col-md-3">
-            <h4>Total: {{ cartTotal | money($page.props.config.default_currency) }}</h4>
+            <h4>Total: {{ cartTotal | money(currency) }}</h4>
         </div>
         <div class="col-12 col-md-4">
             <app-input
@@ -49,7 +49,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['cart', 'cartTotal', 'tempUser'])
+        ...mapGetters(['cart', 'cartTotal', 'tempUser', 'currency'])
     },
     methods: {
         ...mapMutations([

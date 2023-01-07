@@ -48,14 +48,16 @@ class AppServiceProvider extends ServiceProvider
                     'logo_url' => config('business.logo'),
                     'business_name' => config('business.name'),
                     'business_website' => config('business.website'),
-                    'default_currency' => config('business.currency'),
+                    'currencies' => config('business.currencies'),
                     'whatsapp_url' => config('business.whatsapp'),
                     'instagram_url' => config('business.instagram'),
-                    'facebook_url' => config('business.facebook')
+                    'facebook_url' => config('business.facebook'),
+                    'allowed_cross_origin_domains' => config('business.allowed_cross_origin_domains'),
+                    'enable_multiple_currency' => config('business.enable_multiple_currency'),
                 ];
             },
             'tempUser' =>  function () {
-                return Session::get('temp-user');
+                return (object) Session::get('temp-user');
             }
         ]);
     }

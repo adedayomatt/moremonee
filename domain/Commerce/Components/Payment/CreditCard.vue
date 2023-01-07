@@ -1,5 +1,6 @@
 <template>
     <form class="needs-validation" ref="form" novalidate="" @submit.prevent="submit">
+        <p>Enter your card details below</p>
         <div class="row">
             <div class="col-12">
                 <label for="cc-name">Name on card</label>
@@ -16,7 +17,7 @@
                 </div>
             </div>
             <div class="col-12">
-                <label for="cc-number">Credit card number</label>
+                <label for="cc-number">Card number</label>
                 <app-input
                     v-model="form.card_number"
                     type="text"
@@ -45,7 +46,7 @@
                 </div>
             </div>
             <div class="col-6">
-                <label for="cc-expiration">CVV</label>
+                <label for="cc-cvv">CVV</label>
                 <app-input
                     v-model="form.cvv"
                     type="text"

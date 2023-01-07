@@ -19,5 +19,9 @@ const mutations = {
     SET_TEMP_USER: (state, user) => {
         state.tempUser = user
     },
+
+    SET_CURRENCY: (state, currency) => {
+        state.currency = currency
+    },
 };
 export default mutations;

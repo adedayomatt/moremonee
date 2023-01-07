@@ -16,8 +16,8 @@ class CheckoutView extends Controller
         /**
          * Prevent repopulating with last orderDetails if coming from create order
          */
-        if($tempUser && !$this->isComingFromOrderCreate()) {
-            $lastOrder = Order::where([ "email" => $tempUser->email ])->latest()->first();
+        if(!empty($tempUser["email"]) && !$this->isComingFromOrderCreate()) {
+            $lastOrder = Order::where([ "email" => $tempUser["email"] ])->latest()->first();
         }
         return Inertia::render('Commerce/Views/Checkout/Index', compact("lastOrder"));
     }
