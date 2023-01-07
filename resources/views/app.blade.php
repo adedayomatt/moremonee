@@ -13,12 +13,12 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
 
     <!-- Styles -->
-    <link href="{{ asset('fonts/feather/feather.css') }}" rel="stylesheet">
-    <link href="{{ mix('css/theme.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('fonts/feather/feather.css') }}?v={{ md5(config('app.version'))  }}" rel="stylesheet">
+    <link href="{{ mix('css/theme.css') }}?v={{ md5(config('app.version'))  }}" rel="stylesheet" type="text/css">
+    <link href="{{ mix('css/app.css') }}?v={{ md5(config('app.version')) }}" rel="stylesheet" type="text/css">
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.js') }}" defer></script>
+    <script src="{{ mix('js/app.js') }}?v={{ md5(config('app.version')) }}" defer></script>
 
     @routes
 </head>
