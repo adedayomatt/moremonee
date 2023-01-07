@@ -2,8 +2,8 @@
     <div class="container py-4">
         <h2>Orders - {{ orders.total | numberFormat }}</h2>
         <p class="text-muted">{{ tempUser.email }}</p>
-        <div class="bg-white rounded-lg overflow-auto">
-            <div v-if="orders.total">
+        <div v-if="orders.total">
+            <div class="bg-white rounded-lg overflow-auto">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -16,29 +16,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="order in orders.data" :key="order.id">
-                        <td>
-                            <inertia-link :href="route('order.view', [order.reference])">
-                                {{ order.reference }}
-                            </inertia-link>
-                            <div class="small text-muted">  {{ order.created_at | datetime }}</div>
-                        </td>
-                        <td>{{ order.email }}</td>
-                        <td>{{ order.totalAmount | money(order.currency) }}</td>
-                        <td>{{ [order.billing.first_name, order.billing.last_name].join(" ") }}</td>
-                        <td>{{ [order.shipping.first_name, order.shipping.last_name].join(" ") }}</td>
-                        <td><span :class="`badge badge-${order.status == 'completed' ? 'success' : 'warning'}`">{{ order.status }}</span></td>
-                    </tr>
+                        <tr v-for="order in orders.data" :key="order.id">
+                            <td>
+                                <inertia-link :href="route('order.view', [order.reference])">
+                                    {{ order.reference }}
+                                </inertia-link>
+                                <div class="small text-muted">  {{ order.created_at | datetime }}</div>
+                            </td>
+                            <td>{{ order.email }}</td>
+                            <td>{{ order.totalAmount | money(order.currency) }}</td>
+                            <td>{{ [order.billing.first_name, order.billing.last_name].join(" ") }}</td>
+                            <td>{{ [order.shipping.first_name, order.shipping.last_name].join(" ") }}</td>
+                            <td><span :class="`badge badge-${order.status == 'completed' ? 'success' : 'warning'}`">{{ order.status }}</span></td>
+                        </tr>
                     </tbody>
-                    <tfoot>
-                    <pagination :links="orders" />
-                    </tfoot>
                 </table>
             </div>
-            <div v-else class="text-muted text-center py-5">
-                <h2>No order found</h2>
-                <p>No order has been created for {{ tempUser.email }} yet</p>
+            <div class="d-flex justify-content-center mt-5">
+                <pagination :links="orders" />
             </div>
+        </div>
+        <div v-else class="text-muted text-center py-5">
+            <h2>No order found</h2>
+            <p>No order has been created for {{ tempUser.email }} yet</p>
         </div>
     </div>
 </template>

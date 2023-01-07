@@ -2,10 +2,10 @@
         <div>
             <cart-modal ref="cart" />
             <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="topnav">
-                <div class="container px-2">
+                <div class="container px-2 align-items-center">
                     <!-- Brand -->
                     <inertia-link class="navbar-brand mr-auto" :href="route('commerce', [$store.getters.currency])">
-                        <div class="d-flex">
+                        <div class="d-flex align-items-center">
                             <img
                                 :src="config.logo_url"
                                 :alt="config.business_name"
@@ -63,7 +63,7 @@
                     </li>
                 </ul>
             </footer>
-            <div v-if="route().current('commerce') || route().current('orders')" class="pb-4"></div>
+            <div v-if="route().current('commerce') || route().current('orders')" class="pb-5"></div>
             <nav v-if="route().current('commerce') || route().current('orders')" class="navbar fixed-bottom bg-light">
                 <div class="container-fluid">
                     <cart-checkout />

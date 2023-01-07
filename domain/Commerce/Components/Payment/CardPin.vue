@@ -1,12 +1,16 @@
 <template>
     <form class="needs-validation" ref="form" novalidate="" @submit.prevent="submit">
         <p>{{ transaction.message }}</p>
+        <label for="cc-pin">Card pin</label>
         <app-input
-            v-model="form.pin"
+            v-model="form.card_pin"
             type="password"
+            id="cc-pin"
             placeholder="XXXX"
-            name="pin"
-            required />
+            name="card_pin"
+            required
+            prepend-icon="fe fe-lock"
+        />
         <app-button
             class="btn btn-primary btn-block"
             :loading="loading"

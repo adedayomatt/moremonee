@@ -18,10 +18,10 @@ class OrderList extends Controller
                 "message" => "Please provide your email address"
             ]);
         }
-        $tempUser = $this->setTempUser(['email' => $email]);
+        $this->setTempUser(['email' => $email]);
         $orders = Order::where([
-            "email" => $tempUser['email']
-        ])->latest()->paginate();
+            "email" => $email
+        ])->latest()->paginate(config('app.pagination'));
         return Inertia::render('Commerce/Views/OrderList', compact('orders'));
     }
 

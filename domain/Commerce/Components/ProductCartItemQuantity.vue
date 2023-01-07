@@ -14,7 +14,7 @@
             :on-prepend-click="decreaseCartQuantity"
         >
         </app-input>
-        <small v-if="limitReached" class="text-danger mt-n3">Stock limit of {{ product.in_stock }} reached</small>
+        <small v-if="inStock && limitReached" class="text-danger mt-n3">Stock limit of {{ product.in_stock }} reached</small>
         <div class="text-right">
             <small class="text-muted">Total: {{ (item.quantity * product.price) | money(product.currency) }}</small>
         </div>

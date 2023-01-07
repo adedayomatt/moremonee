@@ -15,6 +15,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
     'version' => env('APP_VERSION', "1.0"),
+    'pagination' => env('APP_PAGINATION', 10),
 
     /*
     |--------------------------------------------------------------------------

@@ -5,33 +5,37 @@
         <credit-card v-if="!transaction || startOver"
             @input="submitCard"
             :loading="ui.submittingCard" />
-        <card-pin v-else-if="transaction.action_required == 'pin'"
+        <card-pin v-else-if="transaction.action_required === 'provide_pin'"
           @input="submitPin"
           :loading="ui.submittingPin"/>
-        <otp v-else-if="transaction.action_required == 'otp'"
+        <otp v-else-if="transaction.action_required === 'provide_otp'"
             @input="submitOtp"
             :loading="ui.submittingOtp"
         />
-        <verify-address v-else-if="transaction.action_required == 'verify_address'"
+        <verify-address v-else-if="transaction.action_required === 'provide_address'"
          :order="order"
         :loading="ui.submittingAddress"
         @input="submitAddress"
         />
-        <redirect v-else-if="transaction.action_required == 'redirect'" @callback="postCallback"/>
-        <div v-else-if="transaction.action_required == 'verify_transaction'"
+        <redirect v-else-if="transaction.action_required === 'redirect'"
+                  @callback="postCallback"
+                  @close="postCallback"/>
+        <div v-else-if="transaction.action_required === 'verify_transaction'"
              class="text-center py-5">
             <h2>Verifying transaction...</h2>
             <p class="text-muted">Please hold on, while your transaction is verified...</p>
         </div>
-        <div v-else-if="transaction.action_required == 'retry_verification'"
+        <div v-else-if="transaction.action_required === 'requery_transaction'"
              class="text-center py-5">
-            <h2 class="text-danger">Could not verify transaction</h2>
+            <h2 class="text-danger">Transaction Failed</h2>
             <p class="text-muted">{{ transaction.message }}</p>
-            <app-button
-            class="btn btn-outline-primary btn-block my-2"
-            @click="verifyTransaction"
-            :loading="ui.verifyingTransaction"
-            >Try Again</app-button>
+            <div>
+                <app-button
+                    class="btn btn-primary my-2"
+                    @click="verifyTransaction"
+                    :loading="ui.verifyingTransaction"
+                >Requery Transaction</app-button>
+            </div>
             <app-button
                 v-if="transaction"
                 class="btn btn-outline-primary btn-sm my-2"
@@ -105,7 +109,7 @@ export default {
                 ...this.transaction.card,
                 auth_mode: this.transaction.auth_mode,
                 transaction_reference: this.transaction.transaction_reference,
-                card_pin: data.pin,
+                card_pin: data.card_pin,
             })
             this.ui.submittingPin = false;
         },
@@ -130,7 +134,7 @@ export default {
         },
 
         async postCallback(data) {
-            await this.$inertia.post(route('post.flw.callback'), data);
+            await this.$inertia.post(route('post.flw.callback', [this.transaction.transaction.reference]), data);
         }
     },
 
@@ -138,6 +142,7 @@ export default {
         $page: {
             immediate: true,
             handler(page) {
+                this.startOver = false;
                 if(page.props.transaction) {
                     const actionRequired = page.props.transaction.action_required;
                     switch (actionRequired) {

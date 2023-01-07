@@ -1,5 +1,5 @@
 <template>
-        <div class="pagination" v-if="links.next_page_url && links.prev_page_url">
+        <div class="pagination">
             <inertia-link class="page-item page-link" :href="links.first_page_url" v-if="links.first_page_url"
                           :class="{'disabled': links.current_page === 1 || !links.first_page_url}">First</inertia-link>
             <button class="page-item page-link" v-else disabled>First</button>

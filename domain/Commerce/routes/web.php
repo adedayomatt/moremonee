@@ -14,7 +14,7 @@ Route::prefix('_')->group(function () {
     Route::post('/order/{reference}/payment', \Domain\Commerce\Actions\OrderPayment::class)->name('order.pay');
     Route::post('/transaction/{reference}/verify', \Domain\Commerce\Actions\TransactionVerify::class)->name('transaction.verify');
     Route::post('/transaction/{reference}/otp', \Domain\Commerce\Actions\ValidateOtp::class)->name('otp.validate');
-    Route::post('/flw/callback', \Domain\Commerce\Actions\PostFlwCallback::class)->name('post.flw.callback');
+    Route::post('/flw/callback/{reference}', \Domain\Commerce\Actions\PostFlwCallback::class)->name('post.flw.callback');
 });
 
 Route::get('/flw/callback', \Domain\Commerce\Actions\GetFlwCallback::class)->name('get.flw.callback');

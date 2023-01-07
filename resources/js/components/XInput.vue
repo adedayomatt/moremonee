@@ -8,7 +8,8 @@
         <div class="input-group" :class="{'input-group-merge': groupMerge }">
 
             <!-- Icon -->
-            <div :class="`input-group-prepend ${onPrependClick ? 'cursor-pointer' : ''}`" v-if="hasPrepend" @click="onPrependClick">
+            <div :class="`input-group-prepend ${onPrependClick ? 'cursor-pointer' : ''}`" v-if="hasPrepend"
+                 @click="() => onPrependClick ? onPrependClick() : null">
                   <span class="input-group-text">
                     {{ prependText }}
                     <i :class="prependIcon" v-if="prependIcon"></i>
@@ -25,7 +26,8 @@
                    :class="{ 'form-control-appended': hasAppend, 'form-control-prepended': hasPrepend }">
 
             <!-- Icon -->
-            <div :class="`input-group-append ${onAppendClick ? 'cursor-pointer' : ''}`" v-if="hasAppend" @click="onAppendClick">
+            <div :class="`input-group-append ${onAppendClick ? 'cursor-pointer' : ''}`" v-if="hasAppend"
+                 @click="() => onAppendClick ? onAppendClick() : null">
               <span class="input-group-text">
                 {{ appendText }}
                 <i :class="appendIcon" v-if="appendIcon"></i>

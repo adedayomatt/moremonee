@@ -2,11 +2,17 @@
     <div>
         <div class="frame-container">
             <div class="frame-container-inner">
+                <app-button
+                    class="btn btn-sm btn-outline-danger close-btn"
+                    @click="closeWindow"
+                > <i class="fe fe-x"></i> close</app-button>
                 <iframe :src="transaction.redirect">
                 </iframe>
             </div>
         </div>
-        <h4 class="text-center">Kindly complete the transaction in pop up</h4>
+        <div class="py-5 text-center text-muted">
+            <h4>Kindly complete the transaction in the window</h4>
+        </div>
     </div>
 </template>
 
@@ -26,6 +32,11 @@ export default {
         return {
             open: true
         }
+    },
+    methods: {
+       closeWindow() {
+           this.$emit('close');
+       }
     },
     created() {
         const instance = this;
@@ -56,13 +67,23 @@ export default {
         z-index: 99999999;
     }
     .frame-container .frame-container-inner {
+        position: relative;
         background: #FFFFFF;
+        width: 98%;
+        height: 98vh;
+    }
+    .frame-container .close-btn {
+        position: absolute;
+        z-index: 99999999;
+        top: 2px;
+        right: 2px;
     }
     .frame-container iframe {
         border: none;
         width: 100%;
         height: 100%;
     }
+
     @media screen and (min-width: 768px){
         .frame-container .frame-container-inner {
             width: 80%;

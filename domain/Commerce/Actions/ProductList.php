@@ -20,7 +20,7 @@ class ProductList extends Controller
         $products = Product::where([
             "status" => Constants::STATUS_ENABLED,
             "currency" => $currency
-        ])->latest()->paginate();
+        ])->latest()->paginate(config('app.pagination'));
         return Inertia::render('Commerce/Views/ProductList', compact('products'));
     }
 

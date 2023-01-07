@@ -21,7 +21,9 @@
                    />
                </div>
             </div>
-            <pagination :links="products" />
+            <div class="d-flex justify-content-center mt-5">
+                <pagination :links="products" />
+            </div>
         </div>
         <div v-else class="text-muted text-center">
             <h2>No POS available for purchase at the moment</h2>

@@ -11,53 +11,48 @@
                     placeholder="John Doe"
                     name="name_on_card"
                     :errors="errors"
+                    prepend-icon="fe fe-user"
                     required />
-                <div class="invalid-feedback">
-                    Name on card is required
-                </div>
             </div>
             <div class="col-12">
                 <label for="cc-number">Card number</label>
                 <app-input
                     v-model="form.card_number"
                     type="text"
+                    id="cc-number"
                     placeholder="1234567890"
                     name="card_number"
                     :errors="errors"
+                    prepend-icon="fe fe-hash"
                     required
                 />
-                <div class="invalid-feedback">
-                    Credit card number is required
-                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-6">
-                <label for="cc-expiration">Expiration</label>
+                <label for="cc-expiry">Expiry</label>
                 <app-input
                     v-model="form.expiry"
                     type="text"
+                    id="cc-expiry"
                     placeholder="01/25"
                     name="expiry"
                     :errors="errors"
+                    prepend-icon="fe fe-calendar"
                     required />
-                <div class="invalid-feedback">
-                    Expiration date required
-                </div>
             </div>
             <div class="col-6">
                 <label for="cc-cvv">CVV</label>
                 <app-input
                     v-model="form.cvv"
                     type="text"
+                    id="cc-cvv"
                     placeholder="123"
                     name="cvv"
                     :errors="errors"
+                    prepend-icon="fe fe-lock"
                     required
                 />
-                <div class="invalid-feedback">
-                    Security code required
-                </div>
             </div>
         </div>
         <app-button

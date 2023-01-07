@@ -15,6 +15,7 @@ return [
     */
 
     "flutterwave" => [
+        "api_base_url" => env('FLW_API_BASE_URL'),
         "public_key" => env('FLW_PUBLIC_KEY'),
         "secret_key" => env('FLW_SECRET_KEY'),
         "encryption_key" => env('FLW_ENCRYPTION_KEY'),

@@ -5,7 +5,7 @@
         </div>
         <div class="col-12 col-md-4">
             <app-input
-                v-model="form.email"
+                v-model="email"
                 type="email"
                 name="email"
                 placeholder="you@example.com"
@@ -15,23 +15,26 @@
             <div class="d-flex mt-2 mt-md-0">
                 <app-button
                     :loading="loading"
-                    class="btn btn-primary mx-1"
+                    class="btn btn-sm btn-primary mx-1"
                     :disabled="cart.length == 0"
                     @click="checkout">
+                    <i class="fe fe-log-out"></i>
                     Checkout
                 </app-button>
                 <app-button
-                    class="btn btn-outline-danger mx-1"
+                    class="btn btn-sm btn-outline-danger mx-1"
                     :disabled="cart.length == 0"
                     type="button"
                     @click="clearCart">
+                    <i class="fe fe-x"></i>
                     Clear cart
                 </app-button>
                 <app-button
-                    class="btn btn-primary ml-auto"
+                    class="btn btn-sm btn-primary ml-auto"
                     type="button"
-                    @click="$inertia.visit(route('orders', [form.email]))"
-                >My Orders
+                    :disabled="!email"
+                    @click="$inertia.visit(route('orders', [email]))"
+                ><i class="fe fe-box"></i> My Orders
                 </app-button>
             </div>
         </div>
@@ -45,7 +48,7 @@ export default {
     data() {
         return {
             loading: false,
-            form: {}
+            email: null
         };
     },
     computed: {
@@ -66,15 +69,15 @@ export default {
         },
         async checkout() {
             this.loading = true;
-            await this.$inertia.post(this.route('checkout'), this.form)
+            await this.$inertia.post(this.route('checkout'), { email: this.email })
             this.loading = false;
-        }
+        },
     },
     watch: {
-        tempUser: {
+        $page: {
             immediate: true,
-            handler(user) {
-                if(user) this.form.email = user.email
+            handler() {
+                this.email = this.$store.getters.tempUser.email;
             }
         }
     }

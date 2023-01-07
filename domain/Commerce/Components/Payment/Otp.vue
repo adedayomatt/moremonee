@@ -1,11 +1,14 @@
 <template>
     <form class="needs-validation" ref="form" novalidate="" @submit.prevent="submit">
         <p>{{ transaction.message }}</p>
+        <label for="cc-otp">OTP</label>
         <app-input
             v-model="form.otp"
             type="text"
+            id="cc-otp"
             placeholder="XXXXXX"
             name="otp"
+            prepend-icon="fe fe-lock"
             required />
         <app-button
             class="btn btn-primary btn-block"
@@ -17,7 +20,7 @@
 <script>
 
 export default {
-    name: "OtpValidation",
+    name: "Otp",
     computed: {
         transaction() {
             return this.$page.props.transaction

@@ -32,10 +32,9 @@ export default {
             form: {}
         }
     },
-
     methods: {
-    submit() {
-        this.$emit("input", this.form);
+        submit() {
+            this.$emit("input", this.form);
         }
     },
 }

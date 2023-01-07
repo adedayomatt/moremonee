@@ -18,17 +18,15 @@ class OrderPayment extends Controller
     {
         $order = Order::where("reference", $reference)->firstOrFail();
         $txRef = $request->get('transaction_reference', Flutterwave::generateTxRef());
-        $this->validate($request, $this->creditCardRules());
+        $this->validate($request, Flutterwave::creditCardRules());
         Utils::saveMemory($reference, [
             "transaction_reference" => $txRef,
-            "card" => $request->only([
-                "name_on_card", "card_number", "expiry", "cvv"
-            ])
+            "card" => $request->only(array_keys(Flutterwave::creditCardRules()))
         ]);
         $authorization = [];
         if($request->auth_mode) {
             $authorization['mode'] = $request->auth_mode;
-            $validator = $this->createValidator($request, $this->authRules()[$request->auth_mode]);
+            $validator = Validator::make($request->all(), Flutterwave::authenticationRules()[$request->auth_mode]);
             if($validator->fails()) {
                 return redirect()->back()
                     ->withErrors($validator)
@@ -71,7 +69,6 @@ class OrderPayment extends Controller
                     "amount" => $charge->data->amount,
                     "provider" => Flutterwave::SERVICE_NAME,
                     "provider_reference" => $charge->data->flw_ref,
-                    "status" => $charge->data->status,
                     "currency" => $charge->data->currency,
                     "metadata" => [
                         "chargeId" => $charge->data->id,
@@ -81,12 +78,12 @@ class OrderPayment extends Controller
                 ]);
             }
             Utils::saveMemory($reference, [
-                "action_required" => Flutterwave::authActions()[$charge->meta->authorization->mode],
-                "auth_mode" => $charge->meta->authorization->mode,
+                "action_required" => Flutterwave::actionRequiredForCharge($charge),
+                "auth_mode" => Flutterwave::chargeAuthMode($charge),
                 "transaction" => $transaction
             ]);
             $redirect = redirect()->back();
-            switch ($charge->meta->authorization->mode) {
+            switch (Flutterwave::chargeAuthMode($charge)) {
                 case Flutterwave::AUTH_OTP:
                     Utils::saveMemory($reference, [
                         "message" => $charge->data->processor_response,
@@ -122,56 +119,14 @@ class OrderPayment extends Controller
             }
             return $redirect->with("transaction", Utils::getMemory($reference));
         }
-        return redirect()->back()->with("toast", [
+
+        return redirect()->back()
+            ->with("transaction", Utils::getMemory($reference))
+            ->with("toast", [
             "type" => "error",
             "message" => "Transaction failed. ".($charge && $charge->message ? $charge->message : ""),
             "stick" => true
         ]);
-    }
-
-
-    public function creditCardRules() {
-        return [
-            "name_on_card" => ["required"],
-            "card_number" => ["required"],
-            "expiry" => ["required", "regex:/^(0[1-9]|1[0-2])\/([0-9]{2})$/"],
-            "cvv" => ["required", "regex:/[0-9]{3}/", "max:3"]
-        ];
-    }
-
-    public function cardPinRules() {
-        return [
-            "card_pin" => ["required"]
-        ];
-    }
-
-    public function otpRules() {
-        return [
-            "otp" => ["required"]
-        ];
-    }
-
-    public function addressRules() {
-        return [
-            "address.city" => ["required"],
-            "address.country" => ["required"],
-            "address.state" => ["required"],
-            "address.address" => ["required"],
-            "address.zipcode" => ["required"]
-        ];
-    }
-
-    public function authRules() {
-        $auth = [];
-        $auth[Flutterwave::AUTH_ADDRESS] = $this->addressRules();
-        $auth[Flutterwave::AUTH_PIN] = $this->cardPinRules();
-        $auth[Flutterwave::AUTH_OTP] = $this->otpRules();
-        $auth[Flutterwave::AUTH_REDIRECT] = [];
-        return $auth;
-    }
-
-    public function createValidator(Request $request, $rules) {
-        return Validator::make($request->all(), $rules);
     }
 
 }

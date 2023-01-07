@@ -17,36 +17,31 @@ class TransactionVerify extends Controller
     public function __invoke(Request $request, $reference)
     {
         $transaction = Transaction::where("reference", $reference)->firstOrFail();
-        if($transaction) {
-            $charge = Flutterwave::verifyCharge($transaction->reference, $transaction->metadata->chargeId);
-            if($charge && $charge->status == Constants::STATUS_SUCCESS && $charge->data->status == Constants::STATUS_SUCCESSFUL) {
-                $transaction->update([ "status" => Constants::STATUS_SUCCESS ]);
-                $transaction->order->complete();
-                return redirect()->route("order.view", [$transaction->order->reference])
-                    ->with("transaction", [
-                        "action_required" => "clear_cart"
-                    ])
-                    ->with("toast", [
-                        "type" => "success",
-                        "message" => "Order completed"
-                    ]);
-            } else {
-                $transaction->update([
-                    "status" => Constants::STATUS_FAILED
+        $charge = Flutterwave::verifyCharge($transaction->reference, $transaction->metadata->chargeId);
+        if($charge && $charge->status == Constants::STATUS_SUCCESS && $charge->data->status == Constants::STATUS_SUCCESSFUL) {
+            $transaction->update([ "status" => Constants::STATUS_SUCCESS ]);
+            $transaction->order->complete();
+            return redirect()->route("order.view", [$transaction->order->reference])
+                ->with("transaction", [
+                    "action_required" => Constants::ACTION_CLEAR_CART
+                ])
+                ->with("toast", [
+                    "type" => "success",
+                    "message" => "Order completed"
                 ]);
-                $transaction->order->update([
-                    "status" => Constants::STATUS_FAILED
-                ]);
-                session()->flash("transaction", [
-                    "action_required" => "retry_verification",
-                    "message" => !empty($charge->data->processor_response)
-                        ? $charge->data->processor_response
-                        : "Transaction verification failed, please try again",
-                    "transaction" => $transaction
-                ]);
-            }
         }
+        $transaction->update([
+            "status" => Constants::STATUS_FAILED
+        ]);
+        $transaction->order->update([
+            "status" => Constants::STATUS_FAILED
+        ]);
         return redirect()->back()
+            ->with("transaction", [
+                "action_required" => Constants::ACTION_REQUERY_TRANSACTION,
+                "message" => "Transaction failed, please try again" ,
+                "transaction" => $transaction
+            ])
             ->with("toast", [
                 "type" => "error",
                 "message" => "Payment could not be verified"

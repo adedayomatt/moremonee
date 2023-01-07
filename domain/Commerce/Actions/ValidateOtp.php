@@ -25,7 +25,7 @@ class ValidateOtp extends Controller
         if($charge && $charge->status == Constants::STATUS_SUCCESS) {
            if($charge->data->status === Constants::STATUS_SUCCESSFUL) {
                Utils::saveMemory($transaction->order->reference, [
-                   "action_required" => "verify_transaction",
+                   "action_required" => Constants::ACTION_VERIFY_TRANSACTION,
                    "transaction" => $transaction
                ]);
                return redirect()->back()->with("transaction", Utils::getMemory($transaction->order->reference));
